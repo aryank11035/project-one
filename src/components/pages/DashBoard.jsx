@@ -1,13 +1,24 @@
 // DashboardPage.jsx
-import { Outlet } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 import {
-    SidebarProvider,
     SidebarTrigger,
 } from "@/components/ui/sidebar";
 
 import { SideBar } from "../sidebar/side-bar";
+import { useEffect } from "react";
 
 export default function DashBoardPage() {
+
+    const navigate = useNavigate()
+
+    useEffect(() => {
+        const token = sessionStorage.getItem("accessToken");
+
+        if (!token) {
+            navigate("/");
+        }
+    }, []);
+
     return (
         
             <div className="w-full  flex min-h-screen">

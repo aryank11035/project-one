@@ -3,14 +3,37 @@ import { Input } from "../ui/input";
 import { Textarea } from "../ui/textarea";
 import { Label } from "../ui/label";
 
-import { useState } from "react";
+import { useState , useEffect} from "react";
 import axios from "axios";
-import { useParams } from "next/navigation";
+import { useNavigate, useParams } from "react-router-dom";
 
 export const AddCategory = () => {
 
     const { id } = useParams();
+    const navigate = useNavigate()
+    useEffect(() => {
+        if (!id) {
 
+            setCategory({
+                name : '',
+                image : '' ,
+                description : ''
+            })
+
+            return;
+        };
+
+
+        const getCategory = async () => {
+            const response = await axios.get(
+                `https://6ac658ffbea0e72cf5c8ea72.mockapi.io/category/${id}`
+            );
+
+            setCategory(response.data);
+        };
+
+        getCategory();
+    }, [id]);
 
     const [category , setCategory] = useState({
         name : '' ,
@@ -29,9 +52,25 @@ export const AddCategory = () => {
     }
 
     const onClick = () => {
-        if(id) updateCategory
+        if(id) updateCategory()
         else addCategory();
     }
+
+    const updateCategory = async () => {
+        try {
+            const response = await axios.put(
+                `https://6ac658ffbea0e72cf5c8ea72.mockapi.io/category/${id}`,
+                category
+            );
+
+            setTimeout(() => {
+                navigate('/dashboard/category')
+            } , 200)
+
+        } catch (error) {
+            console.error("Error updating category:", error);
+        }
+    };
 
     const addCategory = async () => {
 
@@ -49,6 +88,11 @@ export const AddCategory = () => {
                 image: "",
                 description: "",
             });
+
+            
+            setTimeout(() => {
+                navigate('/dashboard/category')
+            } , 200)
 
         } catch (error) {
             console.error("Error adding category:", error);
@@ -112,9 +156,8 @@ export const AddCategory = () => {
             </div>
 
 
-
-            <Button onClick={addCategory}>
-                Add Category
+            <Button onClick={onClick}>
+                {id ? "Update Category" : "Add Category"}
             </Button>
         </div>
     )

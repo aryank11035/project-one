@@ -53,7 +53,7 @@ export const AppSidebarContent = () => {
     return (
         <SidebarContent>
             <SidebarGroup>
-
+                
                 <SidebarGroupLabel>
                     Management
                 </SidebarGroupLabel>

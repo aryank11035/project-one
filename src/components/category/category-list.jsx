@@ -28,6 +28,9 @@ export const CategoryList = () => {
     const [categories, setCategories] = useState([]);
     const [loading, setLoading] = useState(true);
 
+    
+
+
     const getCategories = async () => {
         try {
             const response = await axios.get(
@@ -41,6 +44,21 @@ export const CategoryList = () => {
 
         } finally {
             setLoading(false);
+        }
+    };
+
+    const deleteCategory = async (id) => {
+        try {
+            await axios.delete(
+                `https://6ac658ffbea0e72cf5c8ea72.mockapi.io/category/${id}`
+            );
+
+            setCategories(prev =>
+                prev.filter(category => category.id !== id)
+            );
+
+        } catch (error) {
+            console.error("Error deleting category:", error);
         }
     };
 
@@ -129,16 +147,18 @@ export const CategoryList = () => {
 
                                                                 <div className="flex justify-end gap-2">
 
-                                                                    <Button
-                                                                        variant="outline"
-                                                                        size="sm"
-                                                                    >
-                                                                        Edit
-                                                                    </Button>
-
+                                                                    <Link to={`/dashboard/category/add/${category.id}`}>
+                                                                        <Button
+                                                                            variant="outline"
+                                                                            size="sm"
+                                                                        >
+                                                                            Edit
+                                                                        </Button>
+                                                                    </Link>
                                                                     <Button
                                                                         variant="destructive"
                                                                         size="sm"
+                                                                        onClick={() => deleteCategory(category.id)}
                                                                     >
                                                                         Delete
                                                                     </Button>

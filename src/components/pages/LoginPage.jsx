@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom"
 import { LoginForm } from "../login-form"
-
+import axios from "axios"
 import { Formik } from "formik"
 
 
@@ -9,7 +9,7 @@ export default function LoginPage (){
 
 
     return (
-        <div className="flex min-h-svh flex-col items-center justify-center bg-muted p-6 md:p-10">
+        <div className="flex min-h-svh flex-col items-center justify-center bg-muted p-6 md:p-10 w-full">
 
             <Login/>
                 
@@ -24,26 +24,60 @@ const Login = () => {
 
     const navigate = useNavigate()
 
+    const loginUser = async (values, setSubmitting , setErrors) => {
+        try {
+            const response = await axios.post(
+                "https://dummyjson.com/auth/login",
+                {
+                    username: values.name,
+                    password: values.password,
+                }
+            );
+
+            sessionStorage.setItem("accessToken", response.data.accessToken);
+            navigate("/dashboard/category");
+
+        } catch (error) {
+            console.log(error);
+
+            setErrors({
+                name: "Invalid username or password",
+                password: "Invalid username or password",
+            });
+
+            setTimeout(() => {
+                setErrors({
+                    name : '',
+                    password : ''
+                }, 400)
+            })
+
+        } finally {
+            setSubmitting(false);
+        }
+    }
+
+
     return(
         <Formik
-            initialValues={{ email: '', password: '' }}
+            initialValues={{ name : '', password: '' }}
             validate={values => {
                 const errors = {};
 
-                if (!values.email) {
-                    errors.email = 'Required';
-                } else if (
-                    !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(values.email)
+                if (
+                    !values.name
                 ) {
-                    errors.email = 'Invalid email address';
+                    errors.name = 'Invalid name ';
+                } else if (
+                    values.password.includes(" ")
+                ) {
+                    errors.password = 'Must only contains alphabets and numbers'
                 }
                 return errors;
             }}
-            onSubmit={(values, { setSubmitting }) => {
+            onSubmit={(values, { setSubmitting  , setErrors}) => {
                 setTimeout(() => {
-                    alert(JSON.stringify(values, null, 2));
-                    navigate('/dashboard/category')
-                    setSubmitting(false);
+                   loginUser(values , setSubmitting , setErrors)
                 }, 400);
             }}
         >   

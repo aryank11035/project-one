@@ -37,14 +37,17 @@ export function LoginForm({
               <Field>
                 <FieldLabel htmlFor="email">Email</FieldLabel>
                 <Input
-                  id="email"
-                  type="email"
-                  placeholder="m@example.com" 
-                  value={values.email}
+                  id="name"
+                  type="name"
+                  placeholder="name" 
+                  value={values.name}
                   onChange={handleChange}
                   onBlur={handleBlur}
-                  required
+                  
                 />
+                <p className="text-red-500">
+                 {errors.name && touched.name && errors.name}
+                </p>
               </Field>
               <Field>
                 <div className="flex items-center">
@@ -54,10 +57,11 @@ export function LoginForm({
                 <Input 
                   id="password" 
                   type="password" 
-                  required placeholder="........." 
+                   placeholder="........." 
                   value={values.password} 
                   onChange={handleChange}
                   onBlur={handleBlur}/>
+                  <p className="text-red-500">{errors.password && touched.password && errors.password}</p>
               </Field>
               <Field>
                 <Button type="submit" disabled={isSubmitting}>Login</Button>
