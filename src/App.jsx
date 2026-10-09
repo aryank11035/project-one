@@ -21,6 +21,7 @@ function App() {
       <Routes>  
 
         <Route index element={<LoginPage/>} />
+
         <Route path='/dashboard' element={<DashBoardPage />}>
         
           <Route path='category' element={<CategoryPage/>}>
@@ -28,6 +29,8 @@ function App() {
             <Route path='add' element={<AddCategory/>} />
             <Route path="add/:id" element={<AddCategory />} />
           </Route>
+
+          
           <Route path='*' element={<NotFound />} />
         </Route>
       </Routes>

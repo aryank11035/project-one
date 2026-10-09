@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom"
 import { LoginForm } from "../login-form"
 import axios from "axios"
 import { Formik } from "formik"
-
+import { useState } from "react"
 
 export default function LoginPage (){
 
@@ -24,7 +24,8 @@ const Login = () => {
 
     const navigate = useNavigate()
 
-    const loginUser = async (values, setSubmitting , setErrors) => {
+
+    const loginUser = async (values, setSubmitting , setErrors , setTouched) => {
         try {
             const response = await axios.post(
                 "https://dummyjson.com/auth/login",
@@ -34,23 +35,39 @@ const Login = () => {
                 }
             );
 
+            console.log(response)
+
             sessionStorage.setItem("accessToken", response.data.accessToken);
             navigate("/dashboard/category");
 
         } catch (error) {
-            console.log(error);
+            console.log(error.response);
 
-            setErrors({
-                name: "Invalid username or password",
-                password: "Invalid username or password",
-            });
+            if(error.response.status === 400){
 
-            setTimeout(() => {
                 setErrors({
-                    name : '',
-                    password : ''
-                }, 400)
-            })
+                    name: "Invalid username or password",
+                    password: "Invalid username or password",
+                });
+
+                setTouched({
+                    name:true,
+                    password: true,
+                });
+    
+                // setTimeout(() => {
+                //     setErrors({
+                //         name : '',
+                //         password : ''
+                //     })
+
+                //     setTouched({
+                //         name: false,
+                //         password: false,
+                //     });
+                // },1000)
+            }
+
 
         } finally {
             setSubmitting(false);
@@ -68,16 +85,17 @@ const Login = () => {
                     !values.name
                 ) {
                     errors.name = 'Invalid name ';
-                } else if (
+                } 
+                if (
                     values.password.includes(" ")
                 ) {
                     errors.password = 'Must only contains alphabets and numbers'
                 }
                 return errors;
             }}
-            onSubmit={(values, { setSubmitting  , setErrors}) => {
-                setTimeout(() => {
-                   loginUser(values , setSubmitting , setErrors)
+            onSubmit={ async (values, { setSubmitting  , setErrors ,setTouched }) => {
+                setTimeout(  () => {
+                   loginUser(values , setSubmitting , setErrors , setTouched)
                 }, 400);
             }}
         >   
@@ -92,7 +110,7 @@ const Login = () => {
                 handleSubmit,
                 isSubmitting,
             }) => (
-                
+                    
                     
                     <div className="w-full max-w-sm md:max-w-4xl">
                     

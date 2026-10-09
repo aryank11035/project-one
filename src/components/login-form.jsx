@@ -40,6 +40,7 @@ export function LoginForm({
                   id="name"
                   type="name"
                   placeholder="name" 
+                  name="name"
                   value={values.name}
                   onChange={handleChange}
                   onBlur={handleBlur}
@@ -56,7 +57,8 @@ export function LoginForm({
                 </div>
                 <Input 
                   id="password" 
-                  type="password" 
+                  type="password"
+                  name="password" 
                    placeholder="........." 
                   value={values.password} 
                   onChange={handleChange}
@@ -70,12 +72,12 @@ export function LoginForm({
               
             </FieldGroup>
           </form>
-          <div className="relative hidden bg-muted md:block">
-            <img
+          <div className="relative hidden bg-muted md:block gradient-background">
+            {/* <img
               src="/placeholder.svg"
               alt="Image"
               className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.2] dark:grayscale"
-            />
+            /> */}
           </div>
         </CardContent>
       </Card>

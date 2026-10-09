@@ -22,7 +22,6 @@ export default function DashBoardPage() {
     return (
         
             <div className="w-full  flex min-h-screen">
-
                 <SideBar />
 
                 <main className="flex  flex-1 flex-col ">

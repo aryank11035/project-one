@@ -6,11 +6,14 @@ import { Label } from "../ui/label";
 import { useState , useEffect} from "react";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
-
+import { ExclamationMarkIcon  } from "@phosphor-icons/react";
 export const AddCategory = () => {
 
     const { id } = useParams();
     const navigate = useNavigate()
+
+    const [responseMssg , setResponseMssg] = useState('')
+
     useEffect(() => {
         if (!id) {
 
@@ -74,6 +77,17 @@ export const AddCategory = () => {
 
     const addCategory = async () => {
 
+
+        if(category.name == '' || category.description == '' ) {
+            setResponseMssg('Please fill all the details')
+
+
+            setTimeout(() => {
+                setResponseMssg('')
+            },3000)
+
+            return;
+        }
 
         try {
             const response = await axios.post(
@@ -155,6 +169,14 @@ export const AddCategory = () => {
                 <p></p>
             </div>
 
+
+            {
+                responseMssg.length != 0 && (
+                    <div className="w-full px-2 py-2 bg-red-500/30  items-center  gap-2 flex text-red-500 border border-red-500">
+                       <ExclamationMarkIcon size={20}/> {responseMssg}
+                    </div>
+                )
+            }
 
             <Button onClick={onClick}>
                 {id ? "Update Category" : "Add Category"}

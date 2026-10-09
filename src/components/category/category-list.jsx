@@ -128,11 +128,21 @@ export const CategoryList = () => {
                                                             </TableCell>
 
                                                             <TableCell>
-                                                                <img
-                                                                    src={category.image}
-                                                                    alt={category.name}
-                                                                    className="h-10 w-10 object-cover"
-                                                                />
+
+                                                                {
+                                                                    categories.image === undefined ? (
+                                                                        <div className="relative hidden bg-muted md:block gradient-background w-10 h-10">
+                                                                           
+                                                                        </div>
+                                                                    ) : (
+                                                                        
+                                                                        <img
+                                                                            src={category.image}
+                                                                            alt={category.name}
+                                                                            className="h-10 w-10 object-cover"
+                                                                        />
+                                                                    )
+                                                                }
                                                             </TableCell>
 
                                                             <TableCell className="font-medium">
